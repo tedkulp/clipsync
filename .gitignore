@@ -1,0 +1,31 @@
+# Rust
+/target
+**/*.rs.bk
+Cargo.lock
+
+# Tauri
+/desktop/dist
+/desktop/node_modules
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.local
+.mise.local.toml
+
+# Build artifacts
+*.dmg
+*.deb
+*.AppImage
+*.msi
+*.exe

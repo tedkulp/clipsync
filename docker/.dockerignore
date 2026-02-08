@@ -1,0 +1,9 @@
+target/
+.git/
+.gitignore
+*.md
+desktop/
+crates/desktop/
+docker/
+.env
+.env.local

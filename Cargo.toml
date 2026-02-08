@@ -1,0 +1,43 @@
+[workspace]
+members = [
+    "crates/common",
+    "crates/server",
+    "crates/desktop",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["ClipSync Contributors"]
+license = "MIT"
+
+[workspace.dependencies]
+# Shared dependencies
+tokio = { version = "1.41", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+anyhow = "1.0"
+thiserror = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# WebSocket
+tokio-tungstenite = "0.24"
+futures-util = "0.3"
+
+# Crypto
+sha2 = "0.10"
+
+# Clipboard
+arboard = { version = "3.4", features = ["wayland-data-control"] }
+clipboard-master = "4.0"
+
+# Server
+axum = { version = "0.7", features = ["ws"] }
+tower = "0.5"
+tower-http = { version = "0.6", features = ["trace", "cors"] }
+
+# Tauri
+tauri = { version = "2.1", features = ["tray-icon", "image-png"] }
+tauri-plugin-shell = "2.0"
