@@ -1,0 +1,12 @@
+[Unit]
+Description=ClipSync Server
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/clipsync-server
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=default.target

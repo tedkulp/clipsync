@@ -1,0 +1,52 @@
+# Maintainer: Your Name <ted@tedkulp.com>
+pkgname=clipsync-git
+pkgver=r1.d37672e
+pkgrel=1
+pkgdesc="Cross-platform clipboard synchronization tool (git version)"
+arch=('x86_64')
+url="https://github.com/tedkulp/clipsync"
+license=('MIT')
+depends=('webkit2gtk' 'gtk3' 'libayatana-appindicator')
+makedepends=('rust' 'cargo' 'npm' 'git')
+provides=('clipsync')
+conflicts=('clipsync')
+source=("git+$url.git")
+sha256sums=('SKIP')
+
+pkgver() {
+    cd "$srcdir/clipsync"
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+prepare() {
+    cd "$srcdir/clipsync"
+    cd desktop
+    npm install
+}
+
+build() {
+    cd "$srcdir/clipsync"
+    
+    # Build frontend
+    cd desktop
+    npm run build
+    cd ..
+    
+    # Build Tauri app (binary only, no bundles)
+    cd crates/desktop
+    cargo build --release
+}
+
+package() {
+    cd "$srcdir/clipsync"
+    
+    install -Dm755 "target/release/clipsync-desktop" "$pkgdir/usr/bin/clipsync-desktop"
+    install -Dm644 "crates/desktop/clipsync.desktop" "$pkgdir/usr/share/applications/clipsync.desktop"
+    
+    for size in 32x32 128x128; do
+        install -Dm644 "crates/desktop/icons/${size}.png" \
+            "$pkgdir/usr/share/icons/hicolor/${size}/apps/clipsync.png"
+    done
+    
+    install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

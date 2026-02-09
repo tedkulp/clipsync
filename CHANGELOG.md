@@ -11,11 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New application icon showing two clipboards with sync arrows
 - Wayland compatibility fixes with environment variable configuration
 - Custom desktop entry file with graphics workarounds for Linux
+- PKGBUILD for Arch Linux AUR packaging (both stable and -git versions)
+- Systemd user service for clipsync-server auto-start
+- Icon generation during build process
 
 ### Changed
 - Disabled AppImage bundling (requires linuxdeploy) in favor of deb/rpm packages
 - Updated Tauri build configuration to fix frontend path resolution
 - Set GDK_BACKEND=x11 and WEBKIT_DISABLE_DMABUF_RENDERER=1 for Wayland systems
+- PKGBUILD installs both desktop app and server binary
 
 ### Fixed
 - Fixed `make build-desktop` to build frontend before Tauri build
@@ -24,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed Tauri beforeDevCommand path resolution issues
 - Fixed blank window on Wayland systems (GBM buffer errors)
 - Fixed frontend dist path for production builds
+- Fixed production build not embedding frontend assets
 
 ## [0.1.0] - 2026-02-09
 

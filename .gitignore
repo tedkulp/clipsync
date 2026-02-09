@@ -29,3 +29,5 @@ Thumbs.db
 *.AppImage
 *.msi
 *.exe
+*.tar.zst
+*.tar.gz
