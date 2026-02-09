@@ -128,7 +128,6 @@ jobs:
 
       - name: List build outputs (macOS)
         if: matrix.platform == 'macos-latest'
-        working-directory: crates/desktop
         run: |
           echo "Listing bundle directory:"
           ls -R target/universal-apple-darwin/release/bundle/ || echo "Bundle directory not found"
@@ -137,21 +136,15 @@ jobs:
 
       - name: List build outputs (Linux)
         if: matrix.platform == 'ubuntu-22.04'
-        working-directory: crates/desktop
         run: |
-          echo "Current directory: $(pwd)"
-          echo "Listing all target directories:"
-          ls -la target/ || echo "No target directory"
+          echo "Listing bundle directory:"
+          ls -R target/${{ matrix.target }}/release/bundle/ || echo "Bundle directory not found"
           echo ""
-          echo "Checking for bundle directory:"
-          ls -R target/${{ matrix.target }}/release/bundle/ 2>/dev/null || echo "Bundle directory not found at target/${{ matrix.target }}/release/bundle/"
-          echo ""
-          echo "Finding packages recursively:"
-          find . -name "*.deb" -o -name "*.AppImage" -o -name "*.rpm" || echo "No packages found"
+          echo "Finding packages:"
+          find target -name "*.deb" -o -name "*.rpm" || echo "No packages found"
 
       - name: List build outputs (Windows)
         if: matrix.platform == 'windows-latest'
-        working-directory: crates/desktop
         shell: bash
         run: |
           echo "Listing bundle directory:"
@@ -166,7 +159,7 @@ jobs:
         with:
           name: clipsync-macos-universal
           path: |
-            crates/desktop/target/universal-apple-darwin/release/bundle/dmg/*.dmg
+            target/universal-apple-darwin/release/bundle/dmg/*.dmg
           retention-days: 7
           if-no-files-found: warn
 
@@ -176,9 +169,8 @@ jobs:
         with:
           name: clipsync-linux-x86_64
           path: |
-            crates/desktop/target/${{ matrix.target }}/release/bundle/deb/*.deb
-            crates/desktop/target/${{ matrix.target }}/release/bundle/appimage/*.AppImage
-            crates/desktop/target/${{ matrix.target }}/release/bundle/rpm/*.rpm
+            target/${{ matrix.target }}/release/bundle/deb/*.deb
+            target/${{ matrix.target }}/release/bundle/rpm/*.rpm
           retention-days: 7
           if-no-files-found: warn
 
@@ -188,8 +180,8 @@ jobs:
         with:
           name: clipsync-windows-x86_64
           path: |
-            crates/desktop/target/${{ matrix.target }}/release/bundle/nsis/*.exe
-            crates/desktop/target/${{ matrix.target }}/release/bundle/msi/*.msi
+            target/${{ matrix.target }}/release/bundle/nsis/*.exe
+            target/${{ matrix.target }}/release/bundle/msi/*.msi
           retention-days: 7
           if-no-files-found: warn
 
