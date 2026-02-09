@@ -24,21 +24,22 @@ ClipSync consists of two main components:
 
 ## Prerequisites
 
-- [mise](https://mise.jdx.dev/) - Development environment manager
+- Rust 1.88.0 or later
+- Node.js 18 or later
 - Docker (optional, for server deployment)
 
 **First time setup?** See [SETUP.md](SETUP.md) for detailed installation instructions.
 
 Quick setup:
 ```bash
-# Install mise
-curl https://mise.run | sh  # or: brew install mise
+# Install Tauri CLI (if not already installed)
+cargo install tauri-cli --version "^2.0" --locked
 
-# Install project dependencies
-mise install
+# Install frontend dependencies
+cd desktop && npm install && cd ..
 
-# Install Tauri CLI
-./scripts/install-tauri-cli.sh
+# Or use the Makefile for convenience
+make help
 ```
 
 ## Quick Start
@@ -55,20 +56,26 @@ docker-compose up -d
 Or build from source:
 
 ```bash
-make build-server
-./target/release/clipsync-server
-
-# Or run directly
+# Using Makefile
 make run-server
+
+# Or manually
+cargo run -p clipsync-server
 ```
 
 ### Running the Desktop App
 
 ```bash
+# Using Makefile
 make dev-desktop
 
-# Or build for production
+# Or manually
+cd crates/desktop
+cargo tauri dev
+
+# Build for production
 make build-desktop
+# Or: cd crates/desktop && cargo tauri build
 ```
 
 ## Configuration
@@ -105,6 +112,21 @@ cargo tauri build
 ```bash
 docker build -f docker/Dockerfile -t clipsync-server .
 ```
+
+## Contributing
+
+Contributions are welcome! Please:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. **Update CHANGELOG.md** with your changes
+5. Run tests and formatting (`cargo test && cargo fmt`)
+6. Commit your changes (`git commit -m 'Add amazing feature'`)
+7. Push to the branch (`git push origin feature/amazing-feature`)
+8. Open a Pull Request
+
+See [CHANGELOG.md](CHANGELOG.md) for version history.
 
 ## License
 
