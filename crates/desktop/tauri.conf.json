@@ -29,9 +29,6 @@
       },
       "rpm": {
         "desktopTemplate": "clipsync.desktop"
-      },
-      "appimage": {
-        "bundleMediaFramework": false
       }
     },
     "macOS": {

@@ -98,14 +98,8 @@ jobs:
         if: matrix.platform == 'ubuntu-22.04'
         working-directory: crates/desktop
         run: |
-          echo "Building Linux packages..."
-          echo "Current directory: $(pwd)"
-          echo "Checking Cargo.toml exists:"
-          ls -la Cargo.toml
-          echo "Checking frontend dist exists:"
-          ls -la ../../desktop/dist/ || echo "Frontend dist not found!"
-          echo "Running build..."
-          cargo tauri build --target ${{ matrix.target }} --verbose
+          echo "Building Linux packages (deb and rpm only)..."
+          cargo tauri build --target ${{ matrix.target }} --bundles deb,rpm --verbose
 
       - name: Build desktop app (Windows)
         if: matrix.platform == 'windows-latest'
