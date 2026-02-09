@@ -107,18 +107,10 @@ jobs:
           echo "Current directory: $(pwd)"
           echo "Checking Cargo.toml exists:"
           ls -la Cargo.toml
+          echo "Checking frontend dist exists:"
+          ls -la ../../desktop/dist/ || echo "Frontend dist not found!"
           echo "Running build..."
-          set -x
           cargo tauri build --target ${{ matrix.target }} --verbose
-          BUILD_EXIT=$?
-          set +x
-          echo "Build exit code: $BUILD_EXIT"
-          if [ $BUILD_EXIT -ne 0 ]; then
-            echo "Build failed with exit code $BUILD_EXIT"
-            exit $BUILD_EXIT
-          fi
-          echo "Build completed, checking output..."
-          ls -la target/ || echo "No target directory created"
 
       - name: Build desktop app (Windows)
         if: matrix.platform == 'windows-latest'
@@ -147,11 +139,15 @@ jobs:
         if: matrix.platform == 'ubuntu-22.04'
         working-directory: crates/desktop
         run: |
-          echo "Listing bundle directory:"
-          ls -R target/${{ matrix.target }}/release/bundle/ || echo "Bundle directory not found"
+          echo "Current directory: $(pwd)"
+          echo "Listing all target directories:"
+          ls -la target/ || echo "No target directory"
           echo ""
-          echo "Finding packages:"
-          find target -name "*.deb" -o -name "*.AppImage" -o -name "*.rpm"
+          echo "Checking for bundle directory:"
+          ls -R target/${{ matrix.target }}/release/bundle/ 2>/dev/null || echo "Bundle directory not found at target/${{ matrix.target }}/release/bundle/"
+          echo ""
+          echo "Finding packages recursively:"
+          find . -name "*.deb" -o -name "*.AppImage" -o -name "*.rpm" || echo "No packages found"
 
       - name: List build outputs (Windows)
         if: matrix.platform == 'windows-latest'
