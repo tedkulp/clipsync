@@ -74,7 +74,7 @@ fn image_to_png(img: &ImageData) -> anyhow::Result<Vec<u8>> {
 }
 
 /// Convert PNG bytes to ImageData
-fn png_to_image(bytes: &[u8]) -> anyhow::Result<ImageData> {
+fn png_to_image(bytes: &[u8]) -> anyhow::Result<ImageData<'_>> {
     use std::io::Cursor;
 
     let decoder = png::Decoder::new(Cursor::new(bytes));

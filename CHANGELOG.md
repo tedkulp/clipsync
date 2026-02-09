@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-<!-- Add your changes here before committing! -->
+### Added
+- New application icon showing two clipboards with sync arrows
+
+### Fixed
+- Fixed `make build-desktop` to build frontend before Tauri build
+- Fixed `make build-desktop` to generate icons before building
+- Fixed lifetime warning in clipboard PNG conversion
 
 ## [0.1.0] - 2026-02-09
 

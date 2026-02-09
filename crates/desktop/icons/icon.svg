@@ -1,0 +1,44 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1024" height="1024" fill="#5c9eff" rx="180"/>
+  
+  <!-- Left clipboard -->
+  <g transform="translate(180, 280)">
+    <!-- Clipboard body -->
+    <rect x="0" y="40" width="200" height="280" rx="20" fill="white" opacity="0.95"/>
+    <!-- Clipboard clip -->
+    <rect x="60" y="0" width="80" height="60" rx="15" fill="white" opacity="0.95"/>
+    <rect x="70" y="10" width="60" height="40" rx="10" fill="#5c9eff"/>
+    <!-- Paper lines -->
+    <line x1="30" y1="100" x2="170" y2="100" stroke="#5c9eff" stroke-width="8" opacity="0.6"/>
+    <line x1="30" y1="140" x2="170" y2="140" stroke="#5c9eff" stroke-width="8" opacity="0.6"/>
+    <line x1="30" y1="180" x2="130" y2="180" stroke="#5c9eff" stroke-width="8" opacity="0.6"/>
+  </g>
+  
+  <!-- Right clipboard -->
+  <g transform="translate(644, 280)">
+    <!-- Clipboard body -->
+    <rect x="0" y="40" width="200" height="280" rx="20" fill="white" opacity="0.95"/>
+    <!-- Clipboard clip -->
+    <rect x="60" y="0" width="80" height="60" rx="15" fill="white" opacity="0.95"/>
+    <rect x="70" y="10" width="60" height="40" rx="10" fill="#5c9eff"/>
+    <!-- Paper lines -->
+    <line x1="30" y1="100" x2="170" y2="100" stroke="#5c9eff" stroke-width="8" opacity="0.6"/>
+    <line x1="30" y1="140" x2="170" y2="140" stroke="#5c9eff" stroke-width="8" opacity="0.6"/>
+    <line x1="30" y1="180" x2="130" y2="180" stroke="#5c9eff" stroke-width="8" opacity="0.6"/>
+  </g>
+  
+  <!-- Sync arrows in the middle -->
+  <g transform="translate(512, 420)">
+    <!-- Right arrow (top) -->
+    <path d="M -100 -30 L 60 -30 L 60 -60 L 120 0 L 60 60 L 60 30 L -100 30 Z" 
+          fill="white" opacity="0.95"/>
+    <!-- Left arrow (bottom) -->
+    <path d="M 100 -30 L -60 -30 L -60 -60 L -120 0 L -60 60 L -60 30 L 100 30 Z" 
+          fill="white" opacity="0.95" transform="translate(0, 100)"/>
+  </g>
+  
+  <!-- Small sync icon indicator -->
+  <circle cx="512" cy="420" r="80" fill="#5c9eff" opacity="0.3"/>
+  <circle cx="512" cy="420" r="60" fill="#5c9eff" opacity="0.5"/>
+</svg>
