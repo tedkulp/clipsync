@@ -1,7 +1,7 @@
+use clipsync_common::{ClipboardEntry, ServerMessage};
 use std::collections::{HashMap, VecDeque};
 use std::sync::Arc;
 use tokio::sync::{mpsc, RwLock};
-use clipsync_common::{ClipboardEntry, ServerMessage};
 
 pub type ClientSender = mpsc::UnboundedSender<ServerMessage>;
 
@@ -52,7 +52,7 @@ impl Room {
     /// Broadcast a clipboard entry to all clients except the sender
     pub fn broadcast(&self, entry: ClipboardEntry, sender_device_id: &str) {
         let message = ServerMessage::clip_received(entry);
-        
+
         for (device_id, client) in &self.clients {
             if device_id != sender_device_id {
                 if let Err(e) = client.send(message.clone()) {
@@ -91,7 +91,7 @@ impl RoomManager {
     /// Get or create a room for a given secret hash
     pub async fn get_or_create_room(&self, secret_hash: String) -> Arc<RwLock<Room>> {
         let mut rooms = self.rooms.write().await;
-        
+
         rooms
             .entry(secret_hash.clone())
             .or_insert_with(|| {
@@ -112,7 +112,7 @@ impl RoomManager {
                     Err(_) => false, // Keep if we can't check
                 }
             };
-            
+
             if is_empty {
                 tracing::info!("Removing empty room {}", &hash[..8]);
                 false
@@ -127,14 +127,14 @@ impl RoomManager {
     pub async fn get_stats(&self) -> (usize, usize) {
         let rooms = self.rooms.read().await;
         let room_count = rooms.len();
-        
+
         let mut total_clients = 0;
         for room in rooms.values() {
             if let Ok(r) = room.try_read() {
                 total_clients += r.client_count();
             }
         }
-        
+
         (room_count, total_clients)
     }
 }

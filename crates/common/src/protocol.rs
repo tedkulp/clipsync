@@ -1,5 +1,5 @@
-use serde::{Deserialize, Serialize};
 use crate::types::{ClipboardEntry, ClipboardItem};
+use serde::{Deserialize, Serialize};
 
 /// Messages sent from client to server
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -11,10 +11,7 @@ pub enum ClientMessage {
         device_id: String,
     },
     /// Send a new clipboard item
-    NewClip {
-        item: ClipboardItem,
-        timestamp: u64,
-    },
+    NewClip { item: ClipboardItem, timestamp: u64 },
     /// Request full history
     RequestHistory,
     /// Heartbeat/ping
@@ -26,32 +23,25 @@ pub enum ClientMessage {
 #[serde(tag = "type", content = "payload")]
 pub enum ServerMessage {
     /// Successfully joined a room, with recent history
-    Joined {
-        history: Vec<ClipboardEntry>,
-    },
+    Joined { history: Vec<ClipboardEntry> },
     /// A new clipboard item was received from another device
-    ClipReceived {
-        entry: ClipboardEntry,
-    },
+    ClipReceived { entry: ClipboardEntry },
     /// Full history response
-    History {
-        entries: Vec<ClipboardEntry>,
-    },
+    History { entries: Vec<ClipboardEntry> },
     /// Acknowledgment of received clip
-    Ack {
-        timestamp: u64,
-    },
+    Ack { timestamp: u64 },
     /// Error message
-    Error {
-        message: String,
-    },
+    Error { message: String },
     /// Pong response to ping
     Pong,
 }
 
 impl ClientMessage {
     pub fn join(secret_hash: String, device_id: String) -> Self {
-        Self::Join { secret_hash, device_id }
+        Self::Join {
+            secret_hash,
+            device_id,
+        }
     }
 
     pub fn new_clip(item: ClipboardItem, timestamp: u64) -> Self {
@@ -77,7 +67,9 @@ impl ServerMessage {
     }
 
     pub fn error(message: impl Into<String>) -> Self {
-        Self::Error { message: message.into() }
+        Self::Error {
+            message: message.into(),
+        }
     }
 
     pub fn to_json(&self) -> Result<String, serde_json::Error> {
