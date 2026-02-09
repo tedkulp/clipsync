@@ -1,11 +1,11 @@
 {
   "productName": "ClipSync",
   "version": "0.1.0",
-  "identifier": "com.clipsync.app",
+  "identifier": "com.clipsync.desktop",
   "build": {
-    "beforeDevCommand": "npm run dev --prefix $INIT_CWD/desktop",
+    "beforeDevCommand": "npm --prefix ../../desktop run dev",
     "devUrl": "http://localhost:1420",
-    "beforeBuildCommand": "npm run build --prefix $INIT_CWD/desktop",
+    "beforeBuildCommand": "npm --prefix ../../desktop run build",
     "frontendDist": "../../desktop/dist"
   },
   "bundle": {

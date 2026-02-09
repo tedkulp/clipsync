@@ -32,7 +32,7 @@ run-server:
 dev-desktop:
 	@echo "Installing Tauri CLI if needed..."
 	@cargo install tauri-cli --version "^2.0" --locked 2>/dev/null || true
-	cd crates/desktop && INIT_CWD=$(shell pwd) cargo tauri dev
+	cd crates/desktop && cargo tauri dev
 
 test:
 	cargo test --workspace
