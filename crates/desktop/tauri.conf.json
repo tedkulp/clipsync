@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "identifier": "com.clipsync.desktop",
   "build": {
-    "beforeDevCommand": "npm --prefix ../../desktop run dev",
+    "beforeDevCommand": "sh -c 'cd ../desktop && npm run dev'",
+    "beforeBuildCommand": "sh -c 'cd ../desktop && npm run build'",
     "devUrl": "http://localhost:1420",
     "frontendDist": "../../desktop/dist"
   },
   "bundle": {
     "active": true,
-    "targets": "all",
+    "targets": ["deb", "rpm"],
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
@@ -24,7 +25,14 @@
     },
     "linux": {
       "deb": {
-        "depends": []
+        "depends": [],
+        "desktopTemplate": "clipsync.desktop"
+      },
+      "rpm": {
+        "desktopTemplate": "clipsync.desktop"
+      },
+      "appimage": {
+        "bundleMediaFramework": false
       }
     },
     "macOS": {
@@ -36,6 +44,7 @@
     }
   },
   "app": {
+    "enableGTKAppId": true,
     "windows": [
       {
         "title": "ClipSync",

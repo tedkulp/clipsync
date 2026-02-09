@@ -9,11 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - New application icon showing two clipboards with sync arrows
+- Wayland compatibility fixes with environment variable configuration
+- Custom desktop entry file with graphics workarounds for Linux
+
+### Changed
+- Disabled AppImage bundling (requires linuxdeploy) in favor of deb/rpm packages
+- Updated Tauri build configuration to fix frontend path resolution
+- Set GDK_BACKEND=x11 and WEBKIT_DISABLE_DMABUF_RENDERER=1 for Wayland systems
 
 ### Fixed
 - Fixed `make build-desktop` to build frontend before Tauri build
 - Fixed `make build-desktop` to generate icons before building
 - Fixed lifetime warning in clipboard PNG conversion
+- Fixed Tauri beforeDevCommand path resolution issues
+- Fixed blank window on Wayland systems (GBM buffer errors)
+- Fixed frontend dist path for production builds
 
 ## [0.1.0] - 2026-02-09
 
