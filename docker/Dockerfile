@@ -10,10 +10,40 @@ RUN apt-get update && \
     apt-get install -y pkg-config libssl-dev && \
     rm -rf /var/lib/apt/lists/*
 
-# Copy workspace files
-COPY Cargo.toml ./
+# Copy only server-related crates
 COPY crates/common ./crates/common
 COPY crates/server ./crates/server
+
+# Create a minimal workspace Cargo.toml for server-only build
+RUN cat > Cargo.toml <<'EOF'
+[workspace]
+members = [
+    "crates/common",
+    "crates/server",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["ClipSync Contributors"]
+license = "MIT"
+
+[workspace.dependencies]
+tokio = { version = "1.41", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+anyhow = "1.0"
+thiserror = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tokio-tungstenite = "0.24"
+futures-util = "0.3"
+sha2 = "0.10"
+axum = { version = "0.7", features = ["ws"] }
+tower = "0.5"
+tower-http = { version = "0.6", features = ["trace", "cors"] }
+EOF
 
 # Build the server
 RUN cargo build --release -p clipsync-server
