@@ -153,18 +153,16 @@ jobs:
 
       - name: List build outputs (Windows)
         if: matrix.platform == 'windows-latest'
-        shell: pwsh
+        shell: bash
         run: |
-          Write-Host "Listing target directory:"
-          Get-ChildItem -Path crates\desktop\target\${{ matrix.target }}\release -ErrorAction SilentlyContinue | Format-Table
-          Write-Host "Checking for bundle directory:"
-          if (Test-Path crates\desktop\target\${{ matrix.target }}\release\bundle) {
-            Get-ChildItem -Path crates\desktop\target\${{ matrix.target }}\release\bundle -Recurse | Format-Table
-          } else {
-            Write-Host "Bundle directory does not exist"
-          }
-          Write-Host "Finding installers:"
-          Get-ChildItem -Path crates\desktop\target -Recurse -Include *.exe,*.msi -ErrorAction SilentlyContinue | Format-Table
+          echo "Listing workspace target directory:"
+          ls -R target/${{ matrix.target }}/release/bundle/ || echo "Workspace bundle directory not found"
+          echo ""
+          echo "Listing crates/desktop target directory:"
+          ls -R crates/desktop/target/${{ matrix.target }}/release/bundle/ || echo "Crates bundle directory not found"
+          echo ""
+          echo "Finding all installers:"
+          find . -name "*.exe" -o -name "*.msi" || echo "No installers found"
 
       - name: Upload artifacts (macOS)
         if: matrix.platform == 'macos-latest'
@@ -194,6 +192,8 @@ jobs:
         with:
           name: clipsync-windows-x86_64
           path: |
+            crates/desktop/target/${{ matrix.target }}/release/bundle/nsis/*.exe
+            crates/desktop/target/${{ matrix.target }}/release/bundle/msi/*.msi
             target/${{ matrix.target }}/release/bundle/nsis/*.exe
             target/${{ matrix.target }}/release/bundle/msi/*.msi
           retention-days: 7
