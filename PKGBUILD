@@ -1,6 +1,6 @@
 # Maintainer: Your Name <ted@tedkulp.com>
 pkgname=clipsync
-pkgver=0.1.0
+pkgver=0.1.1
 pkgrel=1
 pkgdesc="Cross-platform clipboard synchronization tool"
 arch=('x86_64')
@@ -46,8 +46,9 @@ build() {
 package() {
     cd "$srcdir/$pkgname-$pkgver"
     
-    # Install binaries
-    install -Dm755 "target/release/clipsync-desktop" "$pkgdir/usr/bin/clipsync-desktop"
+    # Install binaries (find them in target directory)
+    local desktop_bin=$(find target -name clipsync-desktop -type f -path "*/release/*" | head -1)
+    install -Dm755 "$desktop_bin" "$pkgdir/usr/bin/clipsync-desktop"
     install -Dm755 "target/release/clipsync-server" "$pkgdir/usr/bin/clipsync-server"
     
     # Create desktop entry with Wayland workarounds

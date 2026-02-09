@@ -31,3 +31,7 @@ Thumbs.db
 *.exe
 *.tar.zst
 *.tar.gz
+
+# makepkg build directories
+/src/
+/pkg/
