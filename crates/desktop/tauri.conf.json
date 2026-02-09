@@ -4,7 +4,6 @@
   "identifier": "com.clipsync.desktop",
   "build": {
     "beforeDevCommand": "sh -c 'cd ../desktop && npm run dev'",
-    "beforeBuildCommand": "sh -c 'cd ../desktop && npm run build'",
     "devUrl": "http://localhost:1420",
     "frontendDist": "../../desktop/dist"
   },

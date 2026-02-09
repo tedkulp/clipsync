@@ -122,10 +122,11 @@ jobs:
 
       - name: Build desktop app (Windows)
         if: matrix.platform == 'windows-latest'
-        working-directory: crates/desktop
         shell: bash
         run: |
           echo "Building Windows installers..."
+          # Frontend is already built in previous step
+          cd crates/desktop
           cargo tauri build --target ${{ matrix.target }} --verbose || {
             echo "Build failed!"
             echo "Checking what exists:"
