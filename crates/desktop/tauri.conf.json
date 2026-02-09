@@ -5,7 +5,6 @@
   "build": {
     "beforeDevCommand": "npm --prefix ../../desktop run dev",
     "devUrl": "http://localhost:1420",
-    "beforeBuildCommand": "npm --prefix ../../desktop run build",
     "frontendDist": "../../desktop/dist"
   },
   "bundle": {

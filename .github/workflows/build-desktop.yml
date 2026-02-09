@@ -79,12 +79,16 @@ jobs:
         working-directory: desktop
         run: npm ci
 
+      - name: Build frontend
+        working-directory: desktop
+        run: npm run build
+
       - name: Install Tauri CLI
         run: cargo install tauri-cli --version "^2.0" --locked
 
       - name: Build desktop app
         working-directory: crates/desktop
-        run: cargo tauri build --target ${{ matrix.target }}
+        run: cargo tauri build --target ${{ matrix.target }} --bundles ${{ matrix.platform == 'macos-latest' && 'dmg' || matrix.platform == 'ubuntu-22.04' && 'deb,appimage' || 'nsis,msi' }}
 
       - name: Upload artifacts (macOS)
         if: matrix.platform == 'macos-latest'
