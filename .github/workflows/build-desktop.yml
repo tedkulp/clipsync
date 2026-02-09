@@ -90,18 +90,41 @@ jobs:
       - name: Build desktop app (macOS Universal)
         if: matrix.platform == 'macos-latest'
         working-directory: crates/desktop
-        run: cargo tauri build --target universal-apple-darwin
+        run: cargo tauri build --target universal-apple-darwin --bundles dmg
 
-      - name: Build desktop app (Other platforms)
-        if: matrix.platform != 'macos-latest'
+      - name: Build desktop app (Linux)
+        if: matrix.platform == 'ubuntu-22.04'
         working-directory: crates/desktop
-        run: cargo tauri build --target ${{ matrix.target }}
+        run: cargo tauri build --target ${{ matrix.target }} --bundles deb,appimage
+
+      - name: Build desktop app (Windows)
+        if: matrix.platform == 'windows-latest'
+        working-directory: crates/desktop
+        run: cargo tauri build --target ${{ matrix.target }} --bundles nsis,msi
 
       - name: List build outputs (macOS)
         if: matrix.platform == 'macos-latest'
         run: |
           echo "Listing bundle directory:"
           ls -R crates/desktop/target/universal-apple-darwin/release/bundle/ || echo "Bundle directory not found"
+          echo "Finding DMG files:"
+          find crates/desktop/target -name "*.dmg" || echo "No DMG files found"
+
+      - name: List build outputs (Linux)
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          echo "Listing bundle directory:"
+          ls -R crates/desktop/target/${{ matrix.target }}/release/bundle/ || echo "Bundle directory not found"
+          echo "Finding packages:"
+          find crates/desktop/target -name "*.deb" -o -name "*.AppImage" || echo "No packages found"
+
+      - name: List build outputs (Windows)
+        if: matrix.platform == 'windows-latest'
+        run: |
+          echo "Listing bundle directory:"
+          dir crates\desktop\target\${{ matrix.target }}\release\bundle\ || echo "Bundle directory not found"
+          echo "Finding installers:"
+          dir /s /b crates\desktop\target\*.exe crates\desktop\target\*.msi || echo "No installers found"
 
       - name: Upload artifacts (macOS)
         if: matrix.platform == 'macos-latest'
@@ -150,18 +173,23 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: artifacts
-          merge-multiple: true
 
       - name: List downloaded artifacts
         run: |
           echo "Downloaded artifacts:"
-          find artifacts -type f
-          ls -R artifacts/
+          ls -R artifacts/ || echo "No artifacts directory"
+          find artifacts -type f 2>/dev/null || echo "No files found"
+
+      - name: Prepare release files
+        run: |
+          mkdir -p release-files
+          find artifacts -type f \( -name "*.dmg" -o -name "*.deb" -o -name "*.AppImage" -o -name "*.exe" -o -name "*.msi" \) -exec cp {} release-files/ \;
+          ls -lh release-files/
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           draft: true
           generate_release_notes: true
-          files: |
-            artifacts/**/*
+          files: release-files/*
+          fail_on_unmatched_files: false
