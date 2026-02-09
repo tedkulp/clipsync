@@ -68,6 +68,7 @@ impl Room {
     }
 
     /// Get number of connected clients
+    #[allow(dead_code)]
     pub fn client_count(&self) -> usize {
         self.clients.len()
     }
@@ -122,6 +123,7 @@ impl RoomManager {
     }
 
     /// Get statistics
+    #[allow(dead_code)]
     pub async fn get_stats(&self) -> (usize, usize) {
         let rooms = self.rooms.read().await;
         let room_count = rooms.len();

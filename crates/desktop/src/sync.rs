@@ -208,6 +208,7 @@ impl SyncManager {
         self.is_paused = paused;
     }
 
+    #[allow(dead_code)]
     pub fn is_connected(&self) -> bool {
         self.is_connected
     }
