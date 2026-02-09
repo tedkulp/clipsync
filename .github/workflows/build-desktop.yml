@@ -92,12 +92,7 @@ jobs:
         working-directory: crates/desktop
         run: |
           echo "Building macOS universal binary..."
-          cargo tauri build --target universal-apple-darwin --verbose || {
-            echo "Build failed!"
-            echo "Checking what exists:"
-            ls -la target/ || echo "No target directory"
-            exit 1
-          }
+          cargo tauri build --target universal-apple-darwin --verbose
 
       - name: Build desktop app (Linux)
         if: matrix.platform == 'ubuntu-22.04'
@@ -114,17 +109,11 @@ jobs:
 
       - name: Build desktop app (Windows)
         if: matrix.platform == 'windows-latest'
+        working-directory: crates/desktop
         shell: bash
         run: |
           echo "Building Windows installers..."
-          # Frontend is already built in previous step
-          cd crates/desktop
-          cargo tauri build --target ${{ matrix.target }} --verbose || {
-            echo "Build failed!"
-            echo "Checking what exists:"
-            ls -la target/ || echo "No target directory"
-            exit 1
-          }
+          cargo tauri build --target ${{ matrix.target }} --verbose
 
       - name: List build outputs (macOS)
         if: matrix.platform == 'macos-latest'
