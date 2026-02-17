@@ -66,9 +66,16 @@ function showMessage(text, type = 'success') {
 }
 
 // Update status
-function updateStatus(connected) {
+function updateStatus(status) {
+    // status can be: { connected: true/false, reconnecting: true/false, attempt: number, nextRetryMs: number }
+    const connected = status.connected;
+    const reconnecting = status.reconnecting;
+
     isConnected = connected;
-    
+
+    // Clear all status classes first
+    statusIndicator.classList.remove('connected', 'reconnecting');
+
     if (connected) {
         statusIndicator.classList.add('connected');
         statusText.textContent = 'Connected';
@@ -77,8 +84,17 @@ function updateStatus(connected) {
         pauseBtn.disabled = false;
         serverUrlInput.disabled = true;
         sharedSecretInput.disabled = true;
+    } else if (reconnecting) {
+        statusIndicator.classList.add('reconnecting');
+        const retrySeconds = Math.round((status.nextRetryMs || 1000) / 1000);
+        statusText.textContent = `Reconnecting (attempt ${status.attempt || 1}, retry in ${retrySeconds}s)...`;
+        // Keep controls disabled during reconnection - user can still disconnect
+        connectBtn.disabled = true;
+        disconnectBtn.disabled = false;
+        pauseBtn.disabled = true;
+        serverUrlInput.disabled = true;
+        sharedSecretInput.disabled = true;
     } else {
-        statusIndicator.classList.remove('connected');
         statusText.textContent = 'Disconnected';
         connectBtn.disabled = false;
         disconnectBtn.disabled = true;
@@ -123,7 +139,6 @@ function addHistoryItem(item, timestamp) {
     console.log('Setting up connect button handler, button:', connectBtn);
     connectBtn.addEventListener('click', async () => {
         console.log('Connect button clicked');
-        alert('Button clicked!'); // Debug
         const serverUrl = serverUrlInput.value.trim();
         const sharedSecret = sharedSecretInput.value.trim();
         
@@ -139,7 +154,7 @@ function addHistoryItem(item, timestamp) {
             console.log('Calling connect_to_server...');
             await invoke('connect_to_server', { serverUrl, sharedSecret });
             console.log('Connect successful');
-            updateStatus(true);
+            updateStatus({ connected: true });
             showMessage('Connected successfully');
         } catch (e) {
             console.error('Connection error:', e);
@@ -151,7 +166,7 @@ function addHistoryItem(item, timestamp) {
     disconnectBtn.addEventListener('click', async () => {
     try {
         await invoke('disconnect_from_server');
-        updateStatus(false);
+        updateStatus({ connected: false });
         showMessage('Disconnected');
     } catch (e) {
         showMessage(`Disconnect failed: ${e}`, 'error');
@@ -207,12 +222,12 @@ function addHistoryItem(item, timestamp) {
         if (config && config.server_url && config.shared_secret) {
             console.log('Auto-connecting to server...');
             try {
-                await invoke('connect_to_server', { 
-                    serverUrl: config.server_url, 
-                    sharedSecret: config.shared_secret 
+                await invoke('connect_to_server', {
+                    serverUrl: config.server_url,
+                    sharedSecret: config.shared_secret
                 });
                 console.log('Auto-connect successful');
-                updateStatus(true);
+                updateStatus({ connected: true });
                 showMessage('Connected successfully');
             } catch (e) {
                 console.error('Auto-connect failed:', e);
@@ -230,8 +245,11 @@ function addHistoryItem(item, timestamp) {
     });
     
     listen('connection-status', (event) => {
-        updateStatus(event.payload.connected);
-        if (!event.payload.connected && event.payload.error) {
+        console.log('connection-status event:', event.payload);
+        updateStatus(event.payload);
+        if (event.payload.reconnected) {
+            showMessage('Connection restored', 'success');
+        } else if (!event.payload.connected && event.payload.error) {
             showMessage(event.payload.error, 'error');
         }
     });

@@ -53,3 +53,8 @@ Thumbs.db
 
 # Local tool output
 /graphify-out/
+
+# Local agent/task tool state
+.sidecar/
+.sidecar-*
+.td-root

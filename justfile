@@ -17,7 +17,7 @@ build-server:
 # Build desktop app
 build-desktop: _tauri-cli _npm-install
     npm --prefix {{ desktop_dir }} run build
-    cd {{ tauri_dir }} && cargo tauri build
+    cd {{ tauri_dir }} && NO_STRIP=true cargo tauri build
 
 # Run desktop app in development mode
 dev-desktop: _tauri-cli _npm-install
@@ -29,7 +29,7 @@ run-server:
 
 # Regenerate app icons from crates/desktop/icons/icon.png
 icons: _tauri-cli
-    cd {{ tauri_dir }} && cargo tauri icon icons/icon.png --output icons
+    cd {{ tauri_dir }} && NO_STRIP=true cargo tauri icon icons/icon.png --output icons
 
 # Run all tests
 test:

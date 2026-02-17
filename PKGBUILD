@@ -1,7 +1,7 @@
 # Maintainer: Your Name <ted@tedkulp.com>
 pkgname=clipsync
 pkgver=0.1.1
-pkgrel=1
+pkgrel=3
 pkgdesc="Cross-platform clipboard synchronization tool"
 arch=('x86_64')
 url="https://github.com/tedkulp/clipsync"
@@ -20,39 +20,39 @@ prepare() {
 }
 
 build() {
-    cd "$srcdir/$pkgname-$pkgver"
-    
-    # Build frontend
-    cd desktop
-    npm run build
-    cd ..
-    
-    # Build server
-    cargo build --release -p clipsync-server
-    
-    # Install tauri-cli if needed
-    cargo install tauri-cli --version "^2.0" --locked 2>/dev/null || true
-    
-    # Generate icons (creates .icns, .ico, etc from icon.png)
-    cd crates/desktop
-    cargo tauri icon icons/icon.png --output icons 2>/dev/null || true
-    
-    # Build Tauri desktop app
-    # Note: We need to use 'cargo tauri build' to properly embed the frontend
-    cd "$srcdir/$pkgname-$pkgver/crates/desktop"
-    cargo tauri build --target x86_64-unknown-linux-gnu --bundles deb
+  cd "$srcdir/$pkgname-$pkgver"
+
+  # Build frontend
+  cd desktop
+  npm run build
+  cd ..
+
+  # Build server
+  cargo build --release -p clipsync-server
+
+  # Install tauri-cli if needed
+  cargo install tauri-cli --version "^2.0" --locked 2>/dev/null || true
+
+  # Generate icons (creates .icns, .ico, etc from icon.png)
+  cd crates/desktop
+  cargo tauri icon icons/icon.png --output icons 2>/dev/null || true
+
+  # Build Tauri desktop app
+  # Note: We need to use 'cargo tauri build' to properly embed the frontend
+  cd "$srcdir/$pkgname-$pkgver/crates/desktop"
+  cargo tauri build --target x86_64-unknown-linux-gnu --bundles deb
 }
 
 package() {
-    cd "$srcdir/$pkgname-$pkgver"
-    
-    # Install binaries (find them in target directory)
-    local desktop_bin=$(find target -name clipsync-desktop -type f -path "*/release/*" | head -1)
-    install -Dm755 "$desktop_bin" "$pkgdir/usr/bin/clipsync-desktop"
-    install -Dm755 "target/release/clipsync-server" "$pkgdir/usr/bin/clipsync-server"
-    
-    # Create desktop entry with Wayland workarounds
-    install -Dm644 /dev/stdin "$pkgdir/usr/share/applications/clipsync.desktop" <<EOF
+  cd "$srcdir/$pkgname-$pkgver"
+
+  # Install binaries (find them in target directory)
+  local desktop_bin=$(find target -name clipsync-desktop -type f -path "*/release/*" | head -1)
+  install -Dm755 "$desktop_bin" "$pkgdir/usr/bin/clipsync-desktop"
+  install -Dm755 "target/release/clipsync-server" "$pkgdir/usr/bin/clipsync-server"
+
+  # Create desktop entry with Wayland workarounds
+  install -Dm644 /dev/stdin "$pkgdir/usr/share/applications/clipsync.desktop" <<EOF
 [Desktop Entry]
 Version=1.0
 Type=Application
@@ -70,8 +70,8 @@ EOF
       "$pkgdir/usr/share/icons/hicolor/${size}/apps/clipsync.png"
   done
 
-    # Install systemd user service
-    install -Dm644 /dev/stdin "$pkgdir/usr/lib/systemd/user/clipsync-server.service" <<EOF
+  # Install systemd user service
+  install -Dm644 /dev/stdin "$pkgdir/usr/lib/systemd/user/clipsync-server.service" <<EOF
 [Unit]
 Description=ClipSync Server
 After=network.target
@@ -85,7 +85,7 @@ RestartSec=5s
 [Install]
 WantedBy=default.target
 EOF
-    
-    # Install license
-    install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+
+  # Install license
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
