@@ -12,7 +12,7 @@ Releases are triggered by pushing a `v*` tag. Two workflows run on the tag:
 - **Build Desktop Apps** (`build-desktop.yml`) — builds macOS universal DMG, Linux deb/rpm, Windows exe/msi, then `create-release` makes a **draft** GitHub Release with those files.
 - **Build Server** (`build-server.yml`) — tests, builds the server binary and multi-arch Docker image, then `release-docker` tags `ghcr.io/tedkulp/clipsync-server:<version>` as `latest`.
 
-The draft must be published by hand, and the Homebrew cask is updated after that. Your job is to prepare the repo, tag the release commit, and walk those follow-up steps.
+The draft must be published by hand; publishing triggers `homebrew.yml`, which updates the Homebrew tap. Your job is to prepare the repo, tag the release commit, and walk those follow-up steps.
 
 ## Release Process
 
@@ -68,7 +68,7 @@ grep -n '^pkgver\|^pkgrel' PKGBUILD
 grep -n 'pkgver\|pkgrel\|source' .SRCINFO
 ```
 
-Don't touch `PKGBUILD.git` — its `pkgver()` is computed from git. Don't touch `clipsync.rb` yet — it's updated in Step 9 once the DMG exists.
+Don't touch `PKGBUILD.git` — its `pkgver()` is computed from git. Don't touch `clipsync.rb` — the tap workflow fills in its version and sha256.
 
 ### Step 4: Update CHANGELOG.md
 
@@ -148,29 +148,22 @@ Review the auto-generated notes (edit in the changelog wording if helpful), then
 gh release edit vX.Y.Z --draft=false
 ```
 
-### Step 9: Update the Homebrew cask
+### Step 9: Confirm the Homebrew tap update
 
-Only after the release is published (draft assets aren't publicly downloadable):
-
-```bash
-./scripts/update-homebrew-formula.sh vX.Y.Z
-git diff clipsync.rb        # version and sha256 should both be set
-git add clipsync.rb
-git commit -m "Update Homebrew cask to vX.Y.Z"
-git push origin main
-```
-
-Then, **with the user's okay**, copy it to the tap repo:
+Publishing the release triggers the **Update Homebrew Tap** workflow (`homebrew.yml`). It downloads the published DMG, fills the version and sha256 into `clipsync.rb`, and pushes `Casks/clipsync.rb` to `tedkulp/homebrew-tap` using the `HOMEBREW_TOKEN` secret.
 
 ```bash
-cp clipsync.rb ../homebrew-tap/Casks/
-cd ../homebrew-tap
-git add Casks/clipsync.rb
-git commit -m "Update clipsync to vX.Y.Z"
-git push
+gh run list --workflow "Update Homebrew Tap" --limit 3
+gh run watch <run-id> --exit-status
 ```
 
-If `../homebrew-tap` doesn't exist locally, tell the user rather than cloning it somewhere unexpected.
+If it failed or didn't run, re-run it for the tag:
+
+```bash
+gh workflow run "Update Homebrew Tap" -f tag=vX.Y.Z
+```
+
+The repo's `clipsync.rb` is the template: edit it (not the tap) when the cask's stanzas change. Its `version`/`sha256` don't need updating for each release.
 
 ## Quick Reference
 
@@ -183,14 +176,14 @@ If `../homebrew-tap` doesn't exist locally, tell the user rather than cloning it
 | Tag builds | `gh run list --branch vX.Y.Z` |
 | Check draft | `gh release view vX.Y.Z` |
 | Publish | `gh release edit vX.Y.Z --draft=false` |
-| Homebrew | `./scripts/update-homebrew-formula.sh vX.Y.Z` |
+| Tap update | `gh run list --workflow "Update Homebrew Tap"` |
 
 ## Common Mistakes
 
-- **Version mismatch** — missing `.SRCINFO` leaves the AUR package pointing at the old tarball; bumping `Cargo.toml` but not `tauri.conf.json` gives DMGs with the old version in the filename, and the Homebrew script then 404s
+- **Version mismatch** — missing `.SRCINFO` leaves the AUR package pointing at the old tarball; bumping `Cargo.toml` but not `tauri.conf.json` gives DMGs with the old version in the filename, and the tap workflow then fails to download the DMG
 - **Stale lock files** — forgetting `cargo update --workspace` leaves `Cargo.lock` on the old version; CI's `npm ci` fails if `package-lock.json` doesn't match `package.json`
 - **Forgetting to push the tag** — `git push` alone does not push tags
 - **Tagging the wrong commit** — tag right after the release commit, before any other commits land
-- **Running the Homebrew script against a draft** — the DMG download fails until the release is published
+- **Publishing as a prerelease** — the tap workflow skips prereleases
 - **Removing `[Unreleased]`** — always leave it, just empty
 - **Wrong date** — use today's actual date in `YYYY-MM-DD` format

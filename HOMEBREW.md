@@ -71,27 +71,21 @@ GitHub Actions will automatically build the DMG and create a draft release.
 3. Review the release notes
 4. Publish the release
 
-### 3. Update Homebrew cask
+### 3. Homebrew tap updates automatically
 
-After the release is published:
+Publishing the release triggers the `Update Homebrew Tap` workflow
+(`.github/workflows/homebrew.yml`). It downloads the DMG, fills the version and
+sha256 into `clipsync.rb`, and pushes `Casks/clipsync.rb` to
+`tedkulp/homebrew-tap`. It needs a `HOMEBREW_TOKEN` repository secret with
+write access to the tap.
 
-```bash
-./scripts/update-homebrew-formula.sh v0.1.1
-```
-
-This downloads the DMG and updates the cask with the sha256.
-
-### 4. Push to tap repo
+To re-run it for a release:
 
 ```bash
-cp clipsync.rb ../homebrew-tap/Casks/
-cd ../homebrew-tap
-git add Casks/clipsync.rb
-git commit -m "Update clipsync to v0.1.1"
-git push
+gh workflow run "Update Homebrew Tap" -f tag=v0.2.0
 ```
 
-### 5. Test the installation
+### 4. Test the installation
 
 ```bash
 brew update
