@@ -235,8 +235,12 @@ async fn attempt_connection(
                         Ok(msg) => {
                             if let Message::Text(text) = msg {
                                 if let Ok(server_msg) = ServerMessage::from_json(&text) {
-                                    handle_server_message(server_msg, &app_handle, &clipboard_manager_clone)
-                                        .await;
+                                    handle_server_message(
+                                        server_msg,
+                                        &app_handle,
+                                        &clipboard_manager_clone,
+                                    )
+                                    .await;
                                 }
                             }
                             // Pong messages are handled automatically by tungstenite
@@ -254,7 +258,10 @@ async fn attempt_connection(
                 }
                 Err(_) => {
                     // Timeout - no data received, connection likely dead
-                    tracing::warn!("Read timeout - no data received for {:?}, connection appears dead", read_timeout);
+                    tracing::warn!(
+                        "Read timeout - no data received for {:?}, connection appears dead",
+                        read_timeout
+                    );
                     break;
                 }
             }
