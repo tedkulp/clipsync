@@ -17,6 +17,9 @@ env:
 jobs:
   test:
     name: Test Server
+    # Release commits are built by the v* tag push; skip the duplicate main build.
+    # Downstream jobs need this one, so they skip too.
+    if: ${{ !(github.ref == 'refs/heads/main' && startsWith(github.event.head_commit.message, 'Release v')) }}
     runs-on: ubuntu-latest
     
     steps:

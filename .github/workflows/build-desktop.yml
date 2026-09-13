@@ -14,6 +14,9 @@ env:
 
 jobs:
   build-desktop:
+    # Release commits are built by the v* tag push; skip the duplicate main build.
+    # create-release needs this job, but it only runs on tags anyway.
+    if: ${{ !(github.ref == 'refs/heads/main' && startsWith(github.event.head_commit.message, 'Release v')) }}
     strategy:
       fail-fast: false
       matrix:

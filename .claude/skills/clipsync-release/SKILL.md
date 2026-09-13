@@ -120,7 +120,7 @@ git push origin main && git push origin vX.Y.Z
 
 Tag **the release commit itself**, immediately after committing. (v0.1.1 ended up on a later fix commit — avoid that.)
 
-Pushing the tag starts Build Desktop Apps and Build Server for the tag. Pushing `main` also starts CI.
+Pushing the tag starts Build Desktop Apps and Build Server for the tag. Pushing `main` starts CI; the `main` runs of Build Desktop Apps and Build Server skip their jobs for commits whose message starts with `Release v`, so the release is only built once (by the tag). Keep the `Release vX.Y.Z` message exactly — that prefix is what the skip matches.
 
 ### Step 8: Watch the tag builds and publish the draft
 
