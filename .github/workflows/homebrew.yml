@@ -22,10 +22,12 @@ jobs:
       TAG: ${{ github.event.release.tag_name || inputs.tag }}
 
     steps:
+      # Use the default branch so the cask template has the latest stanzas;
+      # only the version and sha256 come from the release.
       - name: Checkout repository
         uses: actions/checkout@v5
         with:
-          ref: ${{ env.TAG }}
+          ref: ${{ github.event.repository.default_branch }}
 
       - name: Download DMG and compute checksum
         id: dmg
