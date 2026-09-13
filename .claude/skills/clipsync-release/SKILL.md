@@ -48,6 +48,7 @@ The version lives in several places and they must all match:
 | `crates/desktop/tauri.conf.json` | `"version"` — drives bundle filenames like `ClipSync_X.Y.Z_universal.dmg` |
 | `desktop/package.json` | `"version"` |
 | `PKGBUILD` | `pkgver=X.Y.Z` and reset `pkgrel=1` |
+| `.SRCINFO` | `pkgver = X.Y.Z`, `pkgrel = 1`, and the version in the `source =` URL (keep in sync with `PKGBUILD`) |
 
 Then refresh the lock files so they match:
 
@@ -64,6 +65,7 @@ grep -n '"version"' crates/desktop/tauri.conf.json
 grep -n -m2 '"version"' desktop/package.json desktop/package-lock.json
 grep -n -A1 'name = "clipsync' Cargo.lock | grep version
 grep -n '^pkgver\|^pkgrel' PKGBUILD
+grep -n 'pkgver\|pkgrel\|source' .SRCINFO
 ```
 
 Don't touch `PKGBUILD.git` — its `pkgver()` is computed from git. Don't touch `clipsync.rb` yet — it's updated in Step 9 once the DMG exists.
@@ -103,7 +105,7 @@ These match the checks in `ci.yml` and `build-server.yml`; a failure here would 
 ### Step 6: Commit
 
 ```bash
-git add Cargo.toml Cargo.lock crates/desktop/tauri.conf.json desktop/package.json desktop/package-lock.json PKGBUILD CHANGELOG.md
+git add Cargo.toml Cargo.lock crates/desktop/tauri.conf.json desktop/package.json desktop/package-lock.json PKGBUILD .SRCINFO CHANGELOG.md
 git commit -m "Release vX.Y.Z"
 ```
 
@@ -185,7 +187,7 @@ If `../homebrew-tap` doesn't exist locally, tell the user rather than cloning it
 
 ## Common Mistakes
 
-- **Version mismatch** — bumping `Cargo.toml` but not `tauri.conf.json` gives DMGs with the old version in the filename, and the Homebrew script then 404s
+- **Version mismatch** — missing `.SRCINFO` leaves the AUR package pointing at the old tarball; bumping `Cargo.toml` but not `tauri.conf.json` gives DMGs with the old version in the filename, and the Homebrew script then 404s
 - **Stale lock files** — forgetting `cargo update --workspace` leaves `Cargo.lock` on the old version; CI's `npm ci` fails if `package-lock.json` doesn't match `package.json`
 - **Forgetting to push the tag** — `git push` alone does not push tags
 - **Tagging the wrong commit** — tag right after the release commit, before any other commits land
