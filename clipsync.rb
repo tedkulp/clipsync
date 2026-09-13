@@ -9,9 +9,6 @@ cask "clipsync" do
 
   app "ClipSync.app"
 
-  # Also install the server binary
-  binary "#{appdir}/ClipSync.app/Contents/MacOS/clipsync-server"
-
   zap trash: [
     "~/Library/Application Support/com.clipsync.desktop",
     "~/Library/Preferences/com.clipsync.desktop.plist",

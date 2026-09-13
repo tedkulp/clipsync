@@ -12,7 +12,9 @@ brew install --cask clipsync
 ## What Gets Installed
 
 - `ClipSync.app` - Desktop application (GUI) in `/Applications`
-- `clipsync-server` - WebSocket server binary
+
+The cask does not include `clipsync-server`. Run the server with Docker (see below)
+or build it from source with `cargo build --release -p clipsync-server`.
 
 ## Running
 
@@ -23,7 +25,7 @@ Launch ClipSync from Applications or Spotlight.
 ### Start the server
 
 ```bash
-clipsync-server
+docker run -p 8080:8080 ghcr.io/tedkulp/clipsync-server:latest
 ```
 
 The server runs on `localhost:8080` by default.
