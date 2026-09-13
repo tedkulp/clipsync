@@ -10,8 +10,10 @@ cask "clipsync" do
   app "ClipSync.app"
 
   # The app is only ad-hoc signed; clear quarantine so Gatekeeper allows it to open.
-  postflight do
-    system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{appdir}/ClipSync.app"]
+  postflight_steps do
+    on_macos do
+      run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{appdir}}/ClipSync.app"]
+    end
   end
 
   zap trash: [
