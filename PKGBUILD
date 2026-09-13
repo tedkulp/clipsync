@@ -1,7 +1,7 @@
 # Maintainer: Your Name <ted@tedkulp.com>
 pkgname=clipsync
-pkgver=0.1.1
-pkgrel=3
+pkgver=0.2.0
+pkgrel=1
 pkgdesc="Cross-platform clipboard synchronization tool"
 arch=('x86_64')
 url="https://github.com/tedkulp/clipsync"

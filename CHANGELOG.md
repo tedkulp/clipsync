@@ -7,9 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-09-13
+
 ### Added
-- Homebrew formula for macOS and Linux installation
-- Script to update Homebrew formula sha256 after releases
+- Automatic reconnection: when the connection to the server drops, the desktop
+  app retries every 5 seconds and shows a pulsing "Reconnecting" status with
+  the attempt number
+- Dead-connection detection using a 5-second ping and a 15-second read timeout
+- "Connection restored" message after a successful reconnect
+- `.rpm` packages are now attached to GitHub releases
+- Homebrew cask for macOS installation
+- Script to update the Homebrew cask sha256 after releases
 
 ### Changed
 - Replaced the Makefile with a `justfile`; task names are unchanged, so
@@ -21,6 +29,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Docker recipes use `docker compose` instead of the removed `docker-compose` v1
 - `Cargo.lock` is now committed for reproducible builds
 - Generated `crates/desktop/gen/schemas/` is no longer tracked
+
+### Fixed
+- `just build-desktop` no longer fails on Linux by trying to build an AppImage
+- Removed a leftover debug alert when clicking Connect
 
 ## [0.1.1] - 2026-02-09
 
