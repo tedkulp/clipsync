@@ -2,6 +2,8 @@
 
 desktop_dir := "desktop"
 tauri_dir := "crates/desktop"
+# AppImage bundling needs linuxdeploy and fails; match CI and build deb/rpm only.
+tauri_bundles := if os() == "linux" { "--bundles deb,rpm" } else { "" }
 
 # List available recipes
 default:
@@ -17,7 +19,7 @@ build-server:
 # Build desktop app
 build-desktop: _tauri-cli _npm-install
     npm --prefix {{ desktop_dir }} run build
-    cd {{ tauri_dir }} && NO_STRIP=true cargo tauri build
+    cd {{ tauri_dir }} && NO_STRIP=true cargo tauri build {{ tauri_bundles }}
 
 # Run desktop app in development mode
 dev-desktop: _tauri-cli _npm-install
