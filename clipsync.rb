@@ -1,6 +1,6 @@
 cask "clipsync" do
-  version "0.1.1"
-  sha256 "" # Will be filled after release
+  version "0.2.0"
+  sha256 "4a4dc102f6c515d1d37e9b4a368c873640c6577097e32d9cf1e865533f562389"
 
   url "https://github.com/tedkulp/clipsync/releases/download/v#{version}/ClipSync_#{version}_universal.dmg"
   name "ClipSync"
