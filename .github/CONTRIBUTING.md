@@ -30,6 +30,7 @@ Example:
 1. **Install Prerequisites**
    - Rust 1.88.0 or later
    - Node.js 18 or later
+   - [just](https://just.systems): `brew install just` or `cargo install just`
    - Tauri CLI: `cargo install tauri-cli --version "^2.0" --locked`
 
 2. **Clone and Setup**
@@ -70,11 +71,11 @@ Example:
    cargo test -p clipsync-server
    
    # Test desktop (if applicable)
-   make dev-desktop
+   just dev-desktop
    
    # Test the full flow
-   make run-server  # Terminal 1
-   make dev-desktop # Terminal 2
+   just run-server  # Terminal 1
+   just dev-desktop # Terminal 2
    ```
 
 5. **Commit**

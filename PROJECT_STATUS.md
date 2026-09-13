@@ -57,7 +57,7 @@ All planned features have been implemented according to the specification.
 ### Build System ✅
 - [x] Cargo workspace configuration
 - [x] mise for Rust/Node.js version management
-- [x] Makefile for common tasks
+- [x] justfile for common tasks
 - [x] Cross-platform build support
 - [x] Icon generation scripts
 
@@ -187,9 +187,9 @@ All dependencies are up-to-date and compatible with Rust 1.93.0+
 1. Install mise: `brew install mise` (macOS) or see [mise.jdx.dev](https://mise.jdx.dev)
 2. Clone repository
 3. Run `mise install` to install Rust and Node.js
-4. Run `make build` to build everything
-5. Run `make run-server` in one terminal
-6. Run `make dev-desktop` in another terminal
+4. Run `just build` to build everything
+5. Run `just run-server` in one terminal
+6. Run `just dev-desktop` in another terminal
 7. See DEVELOPMENT.md for more details
 
 ## License

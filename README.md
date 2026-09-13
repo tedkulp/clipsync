@@ -26,6 +26,7 @@ ClipSync consists of two main components:
 
 - Rust 1.88.0 or later
 - Node.js 18 or later
+- [just](https://just.systems) - task runner (`brew install just`, `cargo install just`, or via mise)
 - Docker (optional, for server deployment)
 
 **First time setup?** See [SETUP.md](SETUP.md) for detailed installation instructions.
@@ -38,8 +39,8 @@ cargo install tauri-cli --version "^2.0" --locked
 # Install frontend dependencies
 cd desktop && npm install && cd ..
 
-# Or use the Makefile for convenience
-make help
+# Or list the available tasks
+just
 ```
 
 ## Quick Start
@@ -56,8 +57,8 @@ docker-compose up -d
 Or build from source:
 
 ```bash
-# Using Makefile
-make run-server
+# Using justfile
+just run-server
 
 # Or manually
 cargo run -p clipsync-server
@@ -66,15 +67,15 @@ cargo run -p clipsync-server
 ### Running the Desktop App
 
 ```bash
-# Using Makefile
-make dev-desktop
+# Using justfile
+just dev-desktop
 
 # Or manually
 cd crates/desktop
 cargo tauri dev
 
 # Build for production
-make build-desktop
+just build-desktop
 # Or: cd crates/desktop && cargo tauri build
 ```
 

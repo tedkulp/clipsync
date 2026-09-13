@@ -5,7 +5,7 @@
 - [mise](https://mise.jdx.dev/) - Development environment manager
 - Docker (optional, for server deployment)
 
-**Note**: mise will automatically install the correct versions of Rust and Node.js for you.
+**Note**: mise will automatically install the correct versions of Rust, Node.js, and just for you.
 
 ### Platform-specific requirements
 
@@ -61,14 +61,14 @@ cargo build --release -p clipsync-server
 
 ### Desktop App
 
-The Makefile handles all dependencies automatically:
+The justfile handles all dependencies automatically:
 
 ```bash
 # Development mode (installs Tauri CLI if needed)
-make dev-desktop
+just dev-desktop
 
 # Production build
-make build-desktop
+just build-desktop
 ```
 
 Or manually:

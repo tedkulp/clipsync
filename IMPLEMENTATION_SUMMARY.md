@@ -61,7 +61,7 @@ clipsync/
 - Environment variable support
 
 #### Native ✅
-- Makefile for common tasks
+- justfile for common tasks
 - mise for version management
 - Release builds optimized
 - Cross-platform build support
@@ -93,24 +93,24 @@ clipsync/
 mise install
 
 # Terminal 1: Start server
-make run-server
+just run-server
 
 # Terminal 2: Start desktop app
-make dev-desktop
+just dev-desktop
 ```
 
 ### Production Build
 ```bash
 # Build everything
-make build
+just build
 
 # Or build individually
-make build-server
-make build-desktop
+just build-server
+just build-desktop
 
 # Docker deployment
-make docker-build
-make docker-up
+just docker-build
+just docker-up
 ```
 
 ## Testing

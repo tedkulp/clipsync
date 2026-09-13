@@ -11,6 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Homebrew formula for macOS and Linux installation
 - Script to update Homebrew formula sha256 after releases
 
+### Changed
+- Replaced the Makefile with a `justfile`; task names are unchanged, so
+  `make <task>` becomes `just <task>` (run `just` to list recipes)
+- Icon generation is no longer part of `build-desktop`; run `just icons`
+  explicitly when the source icon changes
+- Tauri CLI is only installed when missing, and frontend dependencies only
+  when `package.json`/`package-lock.json` change
+- Docker recipes use `docker compose` instead of the removed `docker-compose` v1
+- `Cargo.lock` is now committed for reproducible builds
+- Generated `crates/desktop/gen/schemas/` is no longer tracked
+
 ## [0.1.1] - 2026-02-09
 
 ### Added

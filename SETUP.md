@@ -43,6 +43,28 @@ node --version
 npm --version
 ```
 
+#### just (task runner)
+
+**macOS:**
+```bash
+brew install just
+```
+
+**Ubuntu/Debian:**
+```bash
+cargo install just
+```
+
+**Windows:**
+```bash
+cargo install just
+```
+
+**Verify installation:**
+```bash
+just --version
+```
+
 ### 2. Clone the Repository
 
 ```bash
@@ -75,16 +97,16 @@ cd ..
 
 ## Building and Running
 
-### Quick Start with Makefile
+### Quick Start with justfile
 
-The Makefile handles everything automatically:
+The justfile handles everything automatically:
 
 ```bash
 # Start server
-make run-server
+just run-server
 
 # Start desktop app (in another terminal)
-make dev-desktop
+just dev-desktop
 ```
 
 ### Manual Commands
@@ -195,7 +217,7 @@ You can customize the server with environment variables:
 RUST_LOG=debug CLIPSYNC_PORT=8080 cargo run -p clipsync-server
 
 # Or with make
-CLIPSYNC_PORT=9000 make run-server
+CLIPSYNC_PORT=9000 just run-server
 
 # Or export them
 export RUST_LOG=debug
@@ -216,16 +238,16 @@ Once setup is complete:
 
 ```bash
 # Terminal 1: Server with debug logging
-RUST_LOG=debug make run-server
+RUST_LOG=debug just run-server
 
 # Terminal 2: Desktop app
-make dev-desktop
+just dev-desktop
 
 # Terminal 3: Run tests
-make test
+just test
 
 # Build everything for production
-make build
+just build
 ```
 
 ## Using mise (Optional)

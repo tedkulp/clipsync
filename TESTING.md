@@ -6,13 +6,13 @@
 
 1. Start the server:
 ```bash
-make run-server
+just run-server
 # Or: cargo run -p clipsync-server
 ```
 
 2. In separate terminals, start 2+ desktop clients:
 ```bash
-make dev-desktop
+just dev-desktop
 ```
 
 ### Test Cases
@@ -91,7 +91,7 @@ make dev-desktop
 
 Run unit tests:
 ```bash
-make test
+just test
 # Or: cargo test --workspace
 ```
 
@@ -140,8 +140,8 @@ RUST_LOG=debug cargo run -p clipsync-server
 ### Build failures
 ```bash
 # Clean and rebuild
-make clean
-make build
+just clean
+just build
 
 # Update dependencies
 cargo update
